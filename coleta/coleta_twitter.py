@@ -1,6 +1,6 @@
 import json
-
 from tweepy import StreamListener, OAuthHandler, Stream
+import util
 
 
 class TwitterListener(StreamListener):
@@ -10,20 +10,15 @@ class TwitterListener(StreamListener):
         self.max_tweets = 5000
 
     def on_data(self, data):
+        print(data)
         tweet = json.loads(data)
         user = tweet.get('user')
         if user.get('lang') == 'pt':
-            id = tweet.get('id')
-            message = tweet.get('text')
-            tokens = message.split()
-            tw = ""
-            for token in tokens:
-                tw = tw + " " + token
-            message = tw
-            favorites = tweet.get('favorite_count')
-            #salva_csv(id, message, favorites)
+            util.salva_csv(user.get('id'), tweet.get('id'), util.tokens(tweet.get('text')), tweet.get('created_at'),
+                           tweet.get('favorite_count'), user.get('location'))
         if self.cont_tweet >= self.max_tweets:
             return False
+
 
 def start(tags):
     access_token = "2679888692-HhCNqOwUFvBIdI1YuaHTD6VXUE2pgJpt6gBGhSG"
@@ -34,6 +29,7 @@ def start(tags):
     tl = TwitterListener()
     oauth = OAuthHandler(consumer_key, consumer_secret)
     oauth.set_access_token(access_token, access_token_secret)
+    print(tl)
 
     stream = Stream(oauth, tl)
     stream.filter(track=tags)
