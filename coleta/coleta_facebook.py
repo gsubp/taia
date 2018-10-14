@@ -27,7 +27,7 @@ def next_page(url):
         next = requests.get(url).json()
         for c in next.get('data'):
             util.salva_csv('NULL', c.get('id'), util.tokens(c.get('message')), c.get('created_time'), c.get('like_count'),
-                           'NULL', 'NULL', 'NULL')
+                           'NULL')
 
         if next.get('paging') is not None:
             next_page(next.get('paging').get('next'))
