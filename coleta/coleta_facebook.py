@@ -1,19 +1,34 @@
+import util
 import requests
 
-ACCESS_TOKEN = "EAAcbblZCvP80BAMuw7b3RYAJj9eeN3EWqpr24AMi3CpZBQw4JVomYuNZAFjgGCAvhOj4IBbfRT6JgUwxADxPZCo6VGLZAVpgIx9om05uYxTP3JzkKKCSZBBV5VzTiAV6qeuUA0yvGntZBATqCoaJcXUTGZCGdl836bQwYSZATVv7KiSNKXw62kVc2nEoP7BuFRa4ZD"
-BASE_URL = "https://graph.facebook.com/v3.0/"
 
-url = BASE_URL + "" + "?fields=comments.limit(100){id,message,like_count}&access_token=" + ACCESS_TOKEN
-post = requests.get(url).json()
-comments = post['comments']
-for comment in comments['data']:
-    print(comment)
-    id_comm = comment['id']
-    message = comment['message']
-    tokens = message.split()
-    tw = ""
-    for token in tokens:
-        tw = tw + " " + token
-    message = tw
-    like_count = comment['like_count']
-    #salva_csv(id_comm, message, like_count)
+def start(id_post):
+    ACCESS_TOKEN = "EAAE4pgrzWasBAFJH7Ct4ZCdBZApOAsAknEPcT9ucFNxxrhGhUBZBq5gA9idxT452kkRzgdQYoeZAPpoqqaXuLzICR3hbsDLgXV17PFY3vIHtXiZCpjB5qJTzsoWZAAbaNJHRl0b9bt1191IpAMBJgBZBhSG7X1GkeCPZBeyZCuJdSSAiMxXbWN4k7cAbuW4M4SHQZD"
+    BASE_URL = "https://graph.facebook.com/v3.1/"
+
+    url = BASE_URL + id_post + "?fields=comments.limit(100){id,message,like_count}&access_token=" + ACCESS_TOKEN
+    try:
+        post = requests.get(url).json()
+        comments = post.get('comments').get('data')
+
+        for c in comments:
+            util.salva_csv('NULL', c.get('id'), c.get('message'), c.get('created_time'), c.get('like_count'), 'NULL',
+                           'NULL', 'NULL')
+
+        if post.get('comments').get('paging') is not None:
+            next_page(post.get('comments').get('paging').get('next'))
+    except Exception:
+        pass
+
+
+def next_page(url):
+    try:
+        next = requests.get(url).json()
+        for c in next.get('data'):
+            util.salva_csv('NULL', c.get('id'), c.get('message'), c.get('created_time'), c.get('like_count'), 'NULL',
+                           'NULL', 'NULL')
+
+        if next.get('paging') is not None:
+            next_page(next.get('paging').get('next'))
+    except Exception:
+        pass

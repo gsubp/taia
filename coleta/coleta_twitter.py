@@ -25,14 +25,15 @@ class TwitterListener(StreamListener):
         if self.cont_tweet >= self.max_tweets:
             return False
 
-access_token = "2679888692-HhCNqOwUFvBIdI1YuaHTD6VXUE2pgJpt6gBGhSG"
-access_token_secret = "Hzhup6TWl9NSqwLCw6JLW5uLtfUFMMunYwqReNImIkKhp"
-consumer_key = "MNpjEht4TZnp21x7cFFUibcu3"
-consumer_secret = "FHzS2dRLxHpPjkgUfQR0LeDBa0gqPH1mBpmlkv8KEBb5PyPZjK"
+def start(tags):
+    access_token = "2679888692-HhCNqOwUFvBIdI1YuaHTD6VXUE2pgJpt6gBGhSG"
+    access_token_secret = "Hzhup6TWl9NSqwLCw6JLW5uLtfUFMMunYwqReNImIkKhp"
+    consumer_key = "MNpjEht4TZnp21x7cFFUibcu3"
+    consumer_secret = "FHzS2dRLxHpPjkgUfQR0LeDBa0gqPH1mBpmlkv8KEBb5PyPZjK"
 
-tl = TwitterListener()
-oauth = OAuthHandler(consumer_key, consumer_secret)
-oauth.set_access_token(access_token, access_token_secret)
+    tl = TwitterListener()
+    oauth = OAuthHandler(consumer_key, consumer_secret)
+    oauth.set_access_token(access_token, access_token_secret)
 
-stream = Stream(oauth, tl)
-stream.filter(track=[""])
+    stream = Stream(oauth, tl)
+    stream.filter(track=tags)
