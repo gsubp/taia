@@ -14,7 +14,7 @@ def start(id_post):
         for c in comments:
 
             util.salva_csv('NULL', c.get('id'), util.tokens(c.get('message')), c.get('created_time'), c.get('like_count'),
-                           'NULL', 'NULL', 'NULL')
+                           'NULL')
 
         if post.get('comments').get('paging') is not None:
             next_page(post.get('comments').get('paging').get('next'))
