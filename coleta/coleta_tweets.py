@@ -11,7 +11,7 @@ auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
-arquvio = open('TWEETS_COM_LOCALIDADE_07_10_2018.csv', mode='a', encoding='utf-8')
+arquvio = open('coleta.csv', mode='a+', encoding='utf-8')
 
 
 def start():
